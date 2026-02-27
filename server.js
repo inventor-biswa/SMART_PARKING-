@@ -18,9 +18,9 @@ const razorpay = new Razorpay({
 });
 
 // ─── MQTT Config ─────────────────────────────────────────────
-const MQTT_BROKER = "mqtt://98.130.28.156:1883";
-const MQTT_USER = "moambulance";
-const MQTT_PASS = "P@$sw0rd2001";
+const MQTT_BROKER = "mqtt://XX.XXX.XX.XXX:1883";
+const MQTT_USER = "XXXCXXXXXXC";
+const MQTT_PASS = "XCXXXXXX";
 const MQTT_TOPIC_PARKING = "smart parking";
 const MQTT_TOPIC_PAYMENT = "payment";
 
