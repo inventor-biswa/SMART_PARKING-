@@ -1,0 +1,743 @@
+/* ─── Fonts ───────────────────────────────────────────────── */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500&display=swap");
+
+/* ─── Root Tokens ─────────────────────────────────────────── */
+:root {
+  --bg: #0a0d14;
+  --surface: rgba(18, 22, 35, 0.65);
+  --surface-solid: #131825;
+  --border: rgba(255, 255, 255, 0.06);
+  --border-hover: rgba(255, 255, 255, 0.12);
+  --text: #e8eaf0;
+  --text-muted: #6b7194;
+  --accent: #6C63FF;
+  --accent-light: #8b85ff;
+  --accent-glow: rgba(108, 99, 255, 0.3);
+  --green: #22c55e;
+  --green-dim: rgba(34, 197, 94, 0.15);
+  --green-glow: rgba(34, 197, 94, 0.3);
+  --red: #ef4444;
+  --red-dim: rgba(239, 68, 68, 0.12);
+  --red-glow: rgba(239, 68, 68, 0.3);
+  --yellow: #f59e0b;
+  --yellow-dim: rgba(245, 158, 11, 0.12);
+  --yellow-glow: rgba(245, 158, 11, 0.25);
+  --radius: 20px;
+  --radius-sm: 12px;
+}
+
+/* ─── Reset ───────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── Animated Background ─────────────────────────────────── */
+.bg-orbs {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.35;
+}
+
+.orb-1 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+  top: -180px;
+  left: -80px;
+  animation: drift1 20s ease-in-out infinite;
+}
+
+.orb-2 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, #a78bfa 0%, transparent 70%);
+  bottom: -200px;
+  right: -120px;
+  animation: drift2 24s ease-in-out infinite;
+}
+
+.orb-3 {
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, #6ee7b7 0%, transparent 70%);
+  top: 50%;
+  left: 55%;
+  animation: drift3 16s ease-in-out infinite;
+}
+
+@keyframes drift1 {
+
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate(80px, 60px) scale(1.12);
+  }
+}
+
+@keyframes drift2 {
+
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate(-60px, -50px) scale(1.08);
+  }
+}
+
+@keyframes drift3 {
+
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate(-30px, 40px) scale(1.18);
+  }
+}
+
+/* ─── App Layout ──────────────────────────────────────────── */
+.app {
+  position: relative;
+  z-index: 1;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 0 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── Header ──────────────────────────────────────────────── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-icon {
+  font-size: 26px;
+}
+
+.logo-text {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  margin: 0;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mqtt-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--red);
+  transition: background 0.3s;
+}
+
+.mqtt-dot.connected {
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green-glow);
+}
+
+.badge {
+  background: var(--yellow);
+  color: #000;
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 1.2px;
+  padding: 5px 12px;
+  border-radius: 100px;
+  text-transform: uppercase;
+  animation: pulse-badge 2s ease-in-out infinite;
+}
+
+@keyframes pulse-badge {
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 var(--yellow-glow);
+  }
+
+  50% {
+    box-shadow: 0 0 16px 3px var(--yellow-glow);
+  }
+}
+
+/* ─── Slot Status Card ────────────────────────────────────── */
+.slot-card {
+  background: var(--surface);
+  backdrop-filter: blur(24px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px 24px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.4s ease;
+}
+
+.slot-card.occupied {
+  border-color: rgba(239, 68, 68, 0.2);
+  box-shadow: 0 0 40px -10px var(--red-glow);
+}
+
+.slot-card.available {
+  border-color: rgba(34, 197, 94, 0.15);
+  box-shadow: 0 0 40px -10px var(--green-glow);
+}
+
+.slot-card.gate-open {
+  border-color: rgba(34, 197, 94, 0.3);
+  box-shadow: 0 0 60px -10px var(--green-glow);
+}
+
+.slot-indicator {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.slot-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  transition: all 0.3s;
+}
+
+.slot-dot.green {
+  background: var(--green);
+  box-shadow: 0 0 12px var(--green-glow);
+  animation: pulse-green 2s ease-in-out infinite;
+}
+
+.slot-dot.red {
+  background: var(--red);
+  box-shadow: 0 0 12px var(--red-glow);
+  animation: pulse-red 2s ease-in-out infinite;
+}
+
+@keyframes pulse-green {
+
+  0%,
+  100% {
+    box-shadow: 0 0 6px var(--green-glow);
+  }
+
+  50% {
+    box-shadow: 0 0 20px var(--green-glow);
+  }
+}
+
+@keyframes pulse-red {
+
+  0%,
+  100% {
+    box-shadow: 0 0 6px var(--red-glow);
+  }
+
+  50% {
+    box-shadow: 0 0 20px var(--red-glow);
+  }
+}
+
+.slot-label {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+.slot-status-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+/* ─── Timer & Cost Section ────────────────────────────────── */
+.timer-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+  animation: fadeUp 0.5s ease;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.timer-card,
+.cost-card {
+  background: var(--surface);
+  backdrop-filter: blur(24px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px 20px;
+  text-align: center;
+}
+
+.timer-label,
+.cost-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+
+.timer-display {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 28px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  color: var(--text);
+}
+
+.cost-display {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 2px;
+}
+
+.rupee {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--accent-light);
+}
+
+.cost-amount {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 32px;
+  font-weight: 500;
+  color: var(--accent-light);
+}
+
+.cost-rate {
+  display: block;
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+
+/* ─── Pay Button ──────────────────────────────────────────── */
+.pay-btn {
+  width: 100%;
+  padding: 18px;
+  border: none;
+  border-radius: var(--radius);
+  background: linear-gradient(135deg, var(--accent), #8b5cf6);
+  color: #fff;
+  font-size: 17px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.25s;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+  letter-spacing: -0.3px;
+  animation: fadeUp 0.5s ease 0.1s both;
+}
+
+.pay-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.6s;
+}
+
+.pay-btn:hover:not(:disabled)::before {
+  transform: translateX(100%);
+}
+
+.pay-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px var(--accent-glow);
+}
+
+.pay-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.pay-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btn-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ─── Gate Open Animation ─────────────────────────────────── */
+.gate-section {
+  text-align: center;
+  padding: 40px 20px;
+  margin-bottom: 24px;
+  animation: fadeUp 0.6s ease;
+}
+
+.gate-anim {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 24px;
+}
+
+.gate-bar {
+  width: 60px;
+  height: 8px;
+  background: var(--green);
+  border-radius: 4px;
+  animation: gateSlide 1.2s ease-out forwards;
+  box-shadow: 0 0 20px var(--green-glow);
+}
+
+.gate-bar.left {
+  transform-origin: right center;
+  animation-name: gateSlideLeft;
+}
+
+.gate-bar.right {
+  transform-origin: left center;
+  animation-name: gateSlideRight;
+}
+
+@keyframes gateSlideLeft {
+  0% {
+    transform: translateX(0) scaleX(1);
+  }
+
+  100% {
+    transform: translateX(-40px) scaleX(0.3);
+    opacity: 0.4;
+  }
+}
+
+@keyframes gateSlideRight {
+  0% {
+    transform: translateX(0) scaleX(1);
+  }
+
+  100% {
+    transform: translateX(40px) scaleX(0.3);
+    opacity: 0.4;
+  }
+}
+
+.gate-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--green);
+  margin-bottom: 8px;
+}
+
+.gate-sub {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+
+.payment-id {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.payment-id code {
+  background: rgba(108, 99, 255, 0.12);
+  color: var(--accent);
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-family: "JetBrains Mono", monospace;
+}
+
+/* ─── Empty State ─────────────────────────────────────────── */
+.empty-state {
+  text-align: center;
+  padding: 48px 20px;
+  animation: fadeUp 0.5s ease;
+}
+
+.empty-icon {
+  font-size: 56px;
+  margin-bottom: 16px;
+  opacity: 0.6;
+}
+
+.empty-state h2 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: var(--text);
+}
+
+.empty-state p {
+  font-size: 14px;
+  color: var(--text-muted);
+  max-width: 300px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* ─── Result Cards ────────────────────────────────────────── */
+.result-card {
+  padding: 20px;
+  border-radius: var(--radius);
+  backdrop-filter: blur(20px);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  animation: fadeUp 0.4s ease;
+}
+
+.result-card.success {
+  background: var(--green-dim);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.result-card.error {
+  background: var(--red-dim);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.result-card.warning {
+  background: var(--yellow-dim);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.result-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.result-msg {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.result-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* ─── Sections ────────────────────────────────────────────── */
+.section {
+  margin-bottom: 28px;
+}
+
+.section h2 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-icon {
+  font-size: 18px;
+}
+
+.optional {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+/* ─── Test Cards ──────────────────────────────────────────── */
+.test-section {
+  margin-top: 8px;
+}
+
+.test-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.test-card {
+  background: var(--surface);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 20px;
+}
+
+.test-card h4 {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.test-card p {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.test-card code {
+  background: rgba(108, 99, 255, 0.12);
+  color: var(--accent);
+  padding: 2px 6px;
+  border-radius: 5px;
+  font-size: 11px;
+  font-family: "JetBrains Mono", monospace;
+}
+
+/* ─── Simulate Buttons ────────────────────────────────────── */
+.simulate-section {
+  border-top: 1px dashed var(--border);
+  padding-top: 24px;
+}
+
+.sim-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+
+.sim-btns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.sim-btn {
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+
+.sim-btn:hover:not(:disabled) {
+  border-color: var(--border-hover);
+  transform: translateY(-1px);
+}
+
+.sim-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.sim-btn.park:hover:not(:disabled) {
+  border-color: rgba(239, 68, 68, 0.3);
+  box-shadow: 0 4px 16px var(--red-glow);
+}
+
+.sim-btn.leave:hover:not(:disabled) {
+  border-color: rgba(34, 197, 94, 0.3);
+  box-shadow: 0 4px 16px var(--green-glow);
+}
+
+/* ─── Footer ──────────────────────────────────────────────── */
+.footer {
+  margin-top: auto;
+  padding: 28px 0;
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ─── Responsive ──────────────────────────────────────────── */
+@media (max-width: 400px) {
+  .app {
+    padding: 0 14px;
+  }
+
+  .timer-section {
+    grid-template-columns: 1fr;
+  }
+
+  .test-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .timer-display {
+    font-size: 24px;
+  }
+
+  .cost-amount {
+    font-size: 26px;
+  }
+}
